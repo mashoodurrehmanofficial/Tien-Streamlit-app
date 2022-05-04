@@ -1,0 +1,9 @@
+-   Python 3.8 installed on machine
+
+-   pip packahes installed using following command
+pip install -r ./requirements.txt
+
+-   put your csv inside current folder and CSV file name must be data.csv
+
+-    Run the code
+streamlit run ./main.py
