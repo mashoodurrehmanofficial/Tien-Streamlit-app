@@ -23,11 +23,17 @@ styles_sheet = open("style.css",'r',encoding="utf-8").read()
 st.markdown(f"<style> {styles_sheet} </style>",unsafe_allow_html=True,)
 
 # importing csv file
-main_df = pd.read_csv("data.csv",low_memory=False)
+main_df=None
+def readCSVFile():
+    global main_df
+    main_df = pd.read_csv("data.csv", error_bad_lines=False)
+    # main_df = pd.read_csv("data.csv",low_memory=False)
+readCSVFile()
 
+# Sorting df by country
+main_df = main_df.sort_values(by=['country'], ascending=True)
 
-
-# Some functions to extract/manipulate data from csv file. linked with filters
+# Some functions to extract/manipulate data from csv file. linked with filters 
 def generateDateTimeValue(x,month=False):
     index = -1 if not month else -3
     if '/' in str(x):
@@ -126,7 +132,8 @@ hemisphere_multi_select = st.sidebar.multiselect(
 )
 
 # Year range slider - Point 2 filter
-available_years = list(set(main_df['year']))
+available_years = list(dict.fromkeys(main_df['year']))
+available_years.sort()
 year_slide_range = st.sidebar.select_slider('Please select year Range',  options=available_years, value=(available_years[0], available_years[-1]))
 
 
@@ -223,28 +230,7 @@ st.pyplot(stacked_bar_chart_figure)
 
 
 
-# st.sidebar.markdown("<h3 style='margin-top:5%'></h3>", unsafe_allow_html=True)
- 
- 
 
-# option_states = [str(x).upper() for x in list(set(main_df['state'])) if str(x)!='nan']
-# option_countries = [str(x).upper() for x in list(set(main_df['country'])) if str(x)!='nan']
-# if country_vs_state_option=='Countries':
-#     option_menu_src = option_countries
-# else:
-#     option_menu_src = option_states
-
-
-
-# option_1 = st.sidebar.checkbox(option_menu_src[0], key='option_1',value=True)
-# option_2 = st.sidebar.checkbox(option_menu_src[1], key='option_2',value=True)
-# option_3 = st.sidebar.checkbox(option_menu_src[2], key='option_3',)
-# option_4 = st.sidebar.checkbox(option_menu_src[3], key='option_4',)
-# option_5 = st.sidebar.checkbox(option_menu_src[4], key='option_5',)
-
-
-# min_year_line_chart  = st.sidebar.number_input('Enter Min. Year',value=available_years[0],min_value=available_years[0],max_value=available_years[-1])
-# max_year_line_chart = st.sidebar.number_input('Enter Max. Year',value=available_years[-1],min_value=available_years[0],max_value=available_years[-1])
 
 
 
